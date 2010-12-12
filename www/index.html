@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>&lt;audio&gt; Client for "TooTallNate's Pink Floyd Collection"</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  	<link rel="stylesheet" href="stylesheet.css" type="text/css" charset="utf-8">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.1.0/prototype.js"></script>
+    <script type="text/javascript">
+      window.onload = function() {
+        
+        // This 'poll()' function polls for 'metadata' events from the radio stream
+        function poll(force) {
+          var headers = {};
+          if (force) headers['X-Current-Track'] = 1;
+          new Ajax.Request("/metadata", {
+            method: 'get',
+            requestHeaders: headers,
+            onSuccess: function(r) {
+              if (r.responseText) {
+                $('currentSong').update(r.responseJSON.title);
+                $('currentAlbum').update(r.responseJSON.album);
+                $('currentArtist').update(r.responseJSON.artist);
+              }
+              setTimeout(poll, 0);
+            },
+            onFailure: function(r) {
+              console.error(r);
+              poll(true);
+            }
+          });
+        }
+        poll(true);
+        
+        // We'll use 'canPlayType' to determine which file format to request
+        var audio = new Audio();
+        if (audio.canPlayType('application/ogg; codecs="vorbis"') == "probably"
+            && (/Chrome/i.test(navigator.userAgent) || !/Safari/i.test(navigator.userAgent))) {
+          audio.src = "/stream.ogg";
+        } else {
+          audio.src = "/stream.mp3";
+        }
+        audio.setAttribute('controls', true);
+        $("header").insert({ after: audio });
+        audio.load();
+        audio.play();
+      }
+    </script>
+  </head>
+  <body>
+    <h1 class="Floydian" id="header">TooTallNate's<br>Pink Floyd<br>Collection</h1>
+    <div class="Mama" style="font-style: italic;"><u>Now Playing:</u></div>
+    <div class="Mama metadata" id="currentSong"></div>
+    <div class="Mama metadata" id="currentAlbum"></div>
+    <div class="Mama metadata" id="currentArtist"></div>
+  </body>
+</html>

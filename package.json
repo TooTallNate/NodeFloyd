@@ -1,0 +1,17 @@
+{
+  "name": "NodeFloyd",
+  "description": "An Icecast server clone written in NodeJS.",
+  "version": "0.1.0",
+  "author": "Nathan Rajlich <nathan@tootallnate.net>",
+  "keywords": ["SHOUTcast", "Icecast", "Radio", "Internet", "Metadata", "Node", "Pink", "Floyd"],
+  "dependencies": {
+    "colors": "*",
+    "nTunes": "*",
+    "connect": "*",
+    "icecast-stack": "*"
+  },
+  "bin": {
+    "NodeFloyd": "./decodeFromNTunes.sh"
+  },
+  "engines": { "node": ">= 0.3.0" }
+}
