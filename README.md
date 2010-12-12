@@ -26,6 +26,8 @@ Or, for a more permanent installation, try this:
 
    npm install http://nodeload.github.com/TooTallNate/NodeFloyd/tarball/master
 
+That will install the current repo as-is.
+
 
 Usage
 -----
