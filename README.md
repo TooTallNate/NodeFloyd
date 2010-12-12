@@ -24,8 +24,9 @@ can install a local version to hack on like this:
 
 Or, for a more permanent installation, try this:
 
-   npm install https://github.com/TooTallNate/NodeTunes/tarball/master
-    
+   npm install http://nodeload.github.com/TooTallNate/NodeFloyd/tarball/master
+
+
 Usage
 -----
 
