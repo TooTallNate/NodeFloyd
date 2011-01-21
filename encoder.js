@@ -4,7 +4,7 @@ var spawn = require("child_process").spawn;
 exports.Encoder = function(stream, contentType, spawnName, spawnOpts) {
 
   return function(req, res, next) {
-    
+
     // Does the client support icecast metadata?
     var acceptsMetadata = req.headers['icy-metadata'] == 1;
 
@@ -18,6 +18,8 @@ exports.Encoder = function(stream, contentType, spawnName, spawnOpts) {
         return res.end("The maximum number of clients ("+exports.maxClients+") are aleady connected, try connecting again later...")
       }
 
+      console.log(req.headers);
+    
       var headers = {
         "Content-Type": contentType,
         "Connection": "close",

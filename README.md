@@ -2,7 +2,7 @@ NodeFloyd
 =========
 
 Here is an example of an [Icecast][]-compliant server written in JavaScript
-and NodeJS. The current setup uses nTunes to request and play all the "Pink
+and [NodeJS][]. The current setup uses nTunes to request and play all the "Pink
 Floyd" songs in my iTunes library. The script could be tweaked to stream any
 kind of audio data to the Node server. The server is expecting (on _stdin_):
 
@@ -11,6 +11,7 @@ kind of audio data to the Node server. The server is expecting (on _stdin_):
  * 16-bit samples
  * 44,100 samples per second
  * Little-endian
+
 
 Installation
 ------------
@@ -39,5 +40,4 @@ HTML5 `<audio>` compatible web browser (try your smartphone!).
 
 [NodeJS]: http://nodejs.org
 [StreamStack]: http://github.com/TooTallNate/node-stream-stack
-[SHOUTcast]: http://www.shoutcast.com/
 [Icecast]: http://icecast.org/
