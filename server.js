@@ -2,6 +2,8 @@ require("colors");
 var connect = require('connect');
 var encoder = require('./encoder');
 
+process.title = "NodeFloyd";
+
 // An external script is meant to be writing PCM data to stdin of the server.
 var stdin = process.openStdin();
 encoder.stdin = stdin;
@@ -136,7 +138,7 @@ var server = connect.createServer(
         var auth = req.headers.authorization;
         var ct = req.headers['x-title'];
         var returnCode = 401;
-        if (ct && auth && auth.substring(0, 6) == "Basic " && Buffer(auth.substring(6),'base64').toString('ascii') == 'node:rules') {
+        if (ct && auth && auth.substring(0, 6) == "Basic " && Buffer(auth.substring(6), 'base64').toString('ascii') == 'node:rules') {
           stdin.emit('metadata', {
             title: ct,
             artist: req.headers['x-artist'],
