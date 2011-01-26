@@ -1,5 +1,6 @@
 require("colors");
 var connect = require('connect');
+var throttle = require('throttle');
 var encoder = require('./encoder');
 
 process.title = "NodeFloyd";
@@ -18,37 +19,18 @@ var SAMPLE_RATE = 44100;// 44,100 Hz sample rate.
 var BLOCK_ALIGN = SAMPLE_SIZE / 8 * CHANNELS; // Number of 'Bytes per Sample'
 var BYTES_PER_SECOND = SAMPLE_RATE * BLOCK_ALIGN;
 
-// Needed for throttling stdin.
-var startTime = new Date();
-var totalBytes = 0;
+
+// Throttle stdin based on the calculated BYTES_PER_SECOND value
+throttle(stdin, BYTES_PER_SECOND);
+
 
 // A simple "Burst-on-Connect" implementation. We'll store the previous "10
-// seconds" worth of raw PCM data, and send it each time a new connection is made.
-// We also do throttling of stdin on the 'data' event. Since the raw PCM
-// has a liner BYTES_PER_SECOND count, we can calculate an 'expected' value
-// by now, and pause() if we've past that value.
+// seconds" worth of raw PCM data, and send it each time a new Icecast
+// connection is made.
 encoder.bocData = bocData = [];
 var bocSize = BYTES_PER_SECOND * 10; // 10 raw PCM seconds in bytes
 stdin.on("data", onStdinData);
-function resumeStdin() {
-  stdin.resume();
-}
 function onStdinData(chunk) {
-  totalBytes += chunk.length;
-  var totalSeconds = ((new Date()) - startTime) / 1000;
-  var expected = totalSeconds * BYTES_PER_SECOND;
-  //console.log(totalBytes, expected);
-  if (totalBytes > expected) {
-    // Use this byte count to calculate how many seconds ahead we are.
-    var remainder = totalBytes - expected;
-    var sleepTime =  remainder / BYTES_PER_SECOND * 1000;
-    if (sleepTime > 40) {
-      //console.log('sleeping for: ' + sleepTime + " ms");
-      stdin.pause();
-      setTimeout(resumeStdin, sleepTime);
-    }
-  }
-
   bocData.push(chunk);
   var removed = 0;
   while (currentBocSize() > bocSize) {
@@ -88,7 +70,10 @@ encoder.metaint = metaint;
 encoder.clients = clients = [];
 encoder.icecastClients = icecastClients = [];
 
-// The max number of listening clients allowed at a time.
+// The max number of listening Icecast clients allowed at a time.
+// There's a limit because each connection invokes it's own instance of
+// lame, oggenc, aacplusenc, etc. The HTTP Live Streaming is just a matter of
+// serving regular static files, so those clients don't increment the count...
 encoder.maxClients = maxClients = 15;
 
 encoder.metadata = metadata = {};
@@ -96,6 +81,7 @@ encoder.currentTrack = currentTrack = "unknown";
 var currentTrackStartTime;
 var duration;
 var dId;
+// Using 'stdin' just because it's a convient "main" EventEmitter to piggy back from
 stdin.on("metadata", function(metadataObj) {
   encoder.metadata = metadata = metadataObj;
   encoder.currentTrack = currentTrack = metadata.title

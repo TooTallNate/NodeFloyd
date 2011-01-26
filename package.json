@@ -8,7 +8,8 @@
     "colors": "*",
     "nTunes": "*",
     "connect": "*",
-    "icecast-stack": "*"
+    "icecast-stack": "*",
+    "throttle": "*"
   },
   "bin": {
     "NodeFloyd": "./decodeFromNTunes.sh"
