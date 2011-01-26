@@ -113,6 +113,26 @@ var server = connect.createServer(
   encoder.Encoder('/stream.aacp', 'audio/aacp', process.env.HOME + '/aacplusenc/aacplusenc', [
     // No args for now
   ]),
+  // HTTP Live Streaming for iOS 3.0 and up. Actually, it seems like Apple cut support for
+  // Icecast based streams (in Safari at least) in 4.2... bastards!
+  require('live-streaming')({
+
+    mountPoint: '/stream', // Will make m3u8 variant playlist available at "/stream.m3u8"
+                           // Different bitrate's will be placed in "/stream/64/*", 64 being the br
+                           // The bitrate-specific playlist files will be at "/stream/64.m3u8"
+
+    streamDir: __dirname + '/www/stream', // The folder where the static .ts files will live.
+                                      // It must be writable by the user running the server.
+
+    pcmStream: stdin, // The standard ReadableStream to read raw PCM
+                      // audio data from. 'stdin' works well. The data rate is
+                      // expected to be throttled to read audio data in real time.
+
+    bitrate: 96,
+
+    codec: 'libmp3lame' // The audio codec to use. This is the '-acodec' param in ffmpeg
+
+  }),
   function(req, res, next) {
 
     // If "/metadata" is requested, then hold of on sending any response, but

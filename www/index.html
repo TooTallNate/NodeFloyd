@@ -34,7 +34,9 @@
         
         // We'll use 'canPlayType' to determine which file format to request
         var audio = new Audio();
-        if (audio.canPlayType('application/ogg; codecs="vorbis"') == "probably"
+        if (audio.canPlayType("application/vnd.apple.mpegurl") == "probably") {
+          audio.src = "/stream/96k.m3u8";
+        } else if (audio.canPlayType('application/ogg; codecs="vorbis"') == "probably"
             && (/Chrome/i.test(navigator.userAgent) || !/Safari/i.test(navigator.userAgent))) {
           audio.src = "/stream.ogg";
         } else {
@@ -44,6 +46,7 @@
         $("header").insert({ after: audio });
         audio.load();
         audio.play();
+        //console.log(audio.src);
       }
     </script>
   </head>

@@ -9,7 +9,8 @@
     "nTunes": "*",
     "connect": "*",
     "icecast-stack": "*",
-    "throttle": "*"
+    "throttle": "*",
+    "live-streaming": "*"
   },
   "bin": {
     "NodeFloyd": "./decodeFromNTunes.sh"
