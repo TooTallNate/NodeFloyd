@@ -158,7 +158,7 @@ var server = connect.createServer(
       next();
     }
   },
-  connect.staticProvider(__dirname + "/www")
+  connect.static(__dirname + "/www")
 );
 server.listen(5555);
 console.log(("HTTP Icecast server listening at: ".bold + "http://*:" + server.address().port).cyan);
