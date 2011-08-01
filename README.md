@@ -21,8 +21,10 @@ can install a local version to hack on like this:
 
     git clone git://github.com/TooTallNate/NodeFloyd.git
     cd NodeFloyd
-    npm link
+    npm install
 
+You will also need the external programs `lame` and `oggenc` installed and
+visible to your `$PATH`.
 
 
 Usage
