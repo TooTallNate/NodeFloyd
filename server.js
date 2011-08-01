@@ -163,11 +163,6 @@ var server = connect.createServer(
 server.listen(5555);
 console.log(("HTTP Icecast server listening at: ".bold + "http://*:" + server.address().port).cyan);
 
-process.on('uncaughtException', function(e) {
-  console.log("UNCAUGHT EXCEPTION:".red.bold, e.message);
-  console.log(e.stack);
-});
-
 // Takes a Number in seconds, and returns a String in format mm:ss.
 // Used in metadata events to compatible clients (VLC).
 function prettyPrintTime(seconds) {
