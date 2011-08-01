@@ -34,10 +34,10 @@ while (true);
 
   while [ $i -lt $N ]
     do
-    
+
     # Save the current state, in case we need to reboot the server.
     echo $i > "$PWD/currentSong";
-    
+
     # Get the location, name, artist and album of the track.
     LOCATION=`$CURL/$i/location?format=txt`
     NAME=`$CURL/$i/name?format=txt`
@@ -55,7 +55,7 @@ while (true);
 
     # Use 'ffmpeg' to decode the input file to raw 16-bit PCM, 44100
     ffmpeg -i "$LOCATION" -f s16le -acodec pcm_s16le -ar 44100 -ac 2 - 2>/dev/null;
-    
+
     i=$[ $i + 1 ];
     if [ $i -eq $N ]
     then
