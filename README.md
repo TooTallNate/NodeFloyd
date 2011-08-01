@@ -23,9 +23,6 @@ can install a local version to hack on like this:
     cd NodeFloyd
     npm link
 
-Or, for a more permanent installation, try this:
-
-    npm install http://nodeload.github.com/TooTallNate/NodeFloyd/tarball/master
 
 
 Usage
